@@ -104,7 +104,7 @@ Partial Class EtchASketchForm
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(116, 26)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'EditToolStripMenuItem
