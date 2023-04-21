@@ -10,11 +10,31 @@ Option Strict On
 Public Class EtchASketchForm
     Dim currentColor As Color
 
+    Sub drawSinWave()
+        Dim oldColor As Color = Me.currentColor
+        Me.currentColor = Color.Red
+
+        Dim vmax# = ((EtchASketchPictureBox.Height - 5) \ 2)
+        Dim yOffset# = vmax
+        Dim lastX% = -1, lastY% = CInt(yOffset), currentY%, currentX%
+        Dim angle#
+
+        For x = 0 To CInt(EtchASketchPictureBox.Width) Step EtchASketchPictureBox.Width / 360
+            angle = (Math.PI / 180) * x
+            currentY = CInt(-1 * vmax * Math.Sin(angle) + yOffset)
+            currentX = CInt(x * EtchASketchPictureBox.Width / 360)
+            DrawLineSegment(lastX, lastY, currentX, currentY)
+            lastX = currentX
+            lastY = currentY
+        Next
+        Me.currentColor = oldColor
+    End Sub
+
     Sub ClearForm()
         Dim clearResponse As Integer
         Dim offset As Integer = 25
 
-        clearResponse = MsgBox("Are you sure you wish to clear the Etch-A-Sketch?", vbYesNo, "Clear the Etch-A-Sketch.")
+        clearResponse = MsgBox("This action will clear what is Drawn...Are you sure you wish to clear the Etch-A-Sketch?", vbYesNo, "Clear the Etch-A-Sketch.")
 
         If clearResponse = vbYes Then
             For i = 1 To 10
@@ -58,7 +78,7 @@ Public Class EtchASketchForm
 
     Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
         MsgBox("Click and drag your mouse to draw a picture. Click the select color button to choose color of your drawing." _
-               & vbCrLf & "Click the draw waveforms button to display Sin, Cos, and Tan waveforms on the Etch-O-Sketch.", , "About.")
+               & vbCrLf & "Click the draw waveforms button to display Sin, Cos, and Tan waveforms on the Etch-A-Sketch.", , "About Etch-A-Sketch    .")
     End Sub
 
     Private Sub EtchASketchPictureBox_MouseMove(sender As Object, e As MouseEventArgs) Handles EtchASketchPictureBox.MouseMove, EtchASketchPictureBox.MouseDown
@@ -80,5 +100,10 @@ Public Class EtchASketchForm
 
     Private Sub SelectColorButton_Click(sender As Object, e As EventArgs) Handles SelectColorButton.Click, SelectColorToolStripMenuItem.Click
         UpdateColor()
+    End Sub
+
+    Private Sub DrawWaveformsButton_Click(sender As Object, e As EventArgs) Handles DrawWaveformsButton.Click, DrawWaveformsToolStripMenuItem.Click
+        ClearForm()
+        drawSinWave()
     End Sub
 End Class
