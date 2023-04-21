@@ -17,4 +17,19 @@ Public Class EtchASketchForm
             Me.Close()
         End If
     End Sub
+
+    Private Sub ClearButton_Click(sender As Object, e As EventArgs) Handles ClearButton.Click
+        Dim clearResponse As Integer
+
+        clearResponse = MsgBox("Are you sure you wish to clear the Etch-A-Sketch?", vbYesNo, "Clear the Etch-A-Sketch.")
+
+        If clearResponse = vbYes Then
+            EtchASketchPictureBox.Refresh()
+        End If
+    End Sub
+
+    Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
+        MsgBox("Click and drag your mouse to draw a picture. Click the select color button to choose color of your drawing." _
+               & vbCrLf & "Click the draw waveforms button to display Sin, Cos, and Tan waveforms on the Etch-O-Sketch.", , "About.")
+    End Sub
 End Class
