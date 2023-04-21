@@ -10,6 +10,25 @@ Option Strict On
 Public Class EtchASketchForm
     Dim currentColor As Color
 
+    Sub DrawGrid()
+        Dim oldColor As Color = Me.currentColor
+        Me.currentColor = Color.Black
+        Dim bottomEdge As Integer = EtchASketchPictureBox.Height
+        Dim rightEdge As Integer = EtchASketchPictureBox.Width
+        Dim hSpace As Integer = EtchASketchPictureBox.Width \ 10
+        Dim vspace As Integer = EtchASketchPictureBox.Height \ 8
+
+        For i = hSpace To EtchASketchPictureBox.Width Step hSpace
+
+            DrawLineSegment(i, 0, i, bottomEdge, 1)
+        Next
+        For i = vspace To EtchASketchPictureBox.Height Step vspace
+
+            DrawLineSegment(0, i, rightEdge, i, 1)
+        Next
+        Me.currentColor = oldColor
+    End Sub
+
     Sub DrawTanWave()
         Dim oldColor As Color = Me.currentColor
         Me.currentColor = Color.Purple
@@ -24,7 +43,7 @@ Public Class EtchASketchForm
             Try
                 currentY = CInt(-1 * vmax * Math.Tan(angle) + yOffset)
                 currentX = CInt(x * EtchASketchPictureBox.Width / 360)
-                DrawLineSegment(lastX, lastY, currentX, currentY)
+                DrawLineSegment(lastX, lastY, currentX, currentY, 5)
                 lastY = currentY
             Catch ex As Exception
             End Try
@@ -46,7 +65,7 @@ Public Class EtchASketchForm
             angle = (Math.PI / 180) * x
             currentY = CInt(-1 * vmax * Math.Cos(angle) + yOffset)
             currentX = CInt(x * EtchASketchPictureBox.Width / 360)
-            DrawLineSegment(lastX, lastY, currentX, currentY)
+            DrawLineSegment(lastX, lastY, currentX, currentY, 5)
             lastX = currentX
             lastY = currentY
         Next
@@ -66,7 +85,7 @@ Public Class EtchASketchForm
             angle = (Math.PI / 180) * x
             currentY = CInt(-1 * vmax * Math.Sin(angle) + yOffset)
             currentX = CInt(x * EtchASketchPictureBox.Width / 360)
-            DrawLineSegment(lastX, lastY, currentX, currentY)
+            DrawLineSegment(lastX, lastY, currentX, currentY, 5)
             lastX = currentX
             lastY = currentY
         Next
@@ -95,9 +114,9 @@ Public Class EtchASketchForm
         Me.currentColor = EtchASketchColorDialog.Color
     End Sub
 
-    Sub DrawLineSegment(x1%, y1%, x2%, y2%)
+    Sub DrawLineSegment(x1%, y1%, x2%, y2%, lineWidth As Integer)
         Dim graphic As Graphics = EtchASketchPictureBox.CreateGraphics
-        Dim myPen = New Pen(Me.currentColor, 5)
+        Dim myPen = New Pen(Me.currentColor, lineWidth)
 
         graphic.DrawLine(myPen, x1, y1, x2, y2)
 
@@ -128,7 +147,7 @@ Public Class EtchASketchForm
         Static lastX%, lastY%
         Select Case e.Button.ToString
             Case "Left"
-                DrawLineSegment(lastX, lastY, e.X, e.Y)
+                DrawLineSegment(lastX, lastY, e.X, e.Y, 5)
             Case "Middle"
                 UpdateColor()
         End Select
@@ -146,6 +165,7 @@ Public Class EtchASketchForm
 
     Private Sub DrawWaveformsButton_Click(sender As Object, e As EventArgs) Handles DrawWaveformsButton.Click, DrawWaveformsToolStripMenuItem.Click
         ClearForm()
+        DrawGrid()
         DrawSinWave()
         DrawCosWave()
         DrawTanWave()
