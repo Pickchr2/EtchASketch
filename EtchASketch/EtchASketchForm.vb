@@ -10,6 +10,29 @@ Option Strict On
 Public Class EtchASketchForm
     Dim currentColor As Color
 
+    Sub DrawTanWave()
+        Dim oldColor As Color = Me.currentColor
+        Me.currentColor = Color.Purple
+
+        Dim vmax# = ((EtchASketchPictureBox.Height - 5) \ 2)
+        Dim yOffset# = vmax
+        Dim lastX% = -1, lastY% = CInt(yOffset), currentY%, currentX%
+        Dim angle#
+
+        For x = 0 To CInt(EtchASketchPictureBox.Width) Step EtchASketchPictureBox.Width / 360
+            angle = (Math.PI / 180) * x
+            Try
+                currentY = CInt(-1 * vmax * Math.Tan(angle) + yOffset)
+                currentX = CInt(x * EtchASketchPictureBox.Width / 360)
+                DrawLineSegment(lastX, lastY, currentX, currentY)
+                lastY = currentY
+            Catch ex As Exception
+            End Try
+            lastX = currentX
+        Next
+        Me.currentColor = oldColor
+    End Sub
+
     Sub DrawCosWave()
         Dim oldColor As Color = Me.currentColor
         Me.currentColor = Color.Green
@@ -125,5 +148,6 @@ Public Class EtchASketchForm
         ClearForm()
         DrawSinWave()
         DrawCosWave()
+        DrawTanWave()
     End Sub
 End Class
