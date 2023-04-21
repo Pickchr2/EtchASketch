@@ -8,6 +8,8 @@ Option Explicit On
 Option Strict On
 
 Public Class EtchASketchForm
+    Dim currentColor As Color
+
     Private Sub ExitButton_Click(sender As Object, e As EventArgs) Handles ExitButton.Click, ExitToolStripMenuItem.Click
         Dim exitResponse As Integer
 
@@ -20,10 +22,17 @@ Public Class EtchASketchForm
 
     Private Sub ClearButton_Click(sender As Object, e As EventArgs) Handles ClearButton.Click
         Dim clearResponse As Integer
+        Dim offset As Integer = 25
 
         clearResponse = MsgBox("Are you sure you wish to clear the Etch-A-Sketch?", vbYesNo, "Clear the Etch-A-Sketch.")
 
         If clearResponse = vbYes Then
+            For i = 1 To 10
+                offset = offset * -1
+                Me.Top += offset
+                Me.Left += offset
+                System.Threading.Thread.Sleep(100)
+            Next
             EtchASketchPictureBox.Refresh()
         End If
     End Sub
