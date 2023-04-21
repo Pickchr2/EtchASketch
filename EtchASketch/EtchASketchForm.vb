@@ -10,6 +10,23 @@ Option Strict On
 Public Class EtchASketchForm
     Dim currentColor As Color
 
+    Sub ClearForm()
+        Dim clearResponse As Integer
+        Dim offset As Integer = 25
+
+        clearResponse = MsgBox("Are you sure you wish to clear the Etch-A-Sketch?", vbYesNo, "Clear the Etch-A-Sketch.")
+
+        If clearResponse = vbYes Then
+            For i = 1 To 10
+                offset = offset * -1
+                Me.Top += offset
+                Me.Left += offset
+                System.Threading.Thread.Sleep(100)
+            Next
+            EtchASketchPictureBox.Refresh()
+        End If
+    End Sub
+
     Sub UpdateColor()
         EtchASketchColorDialog.ShowDialog()
         Me.currentColor = EtchASketchColorDialog.Color
@@ -17,7 +34,7 @@ Public Class EtchASketchForm
 
     Sub DrawLineSegment(x1%, y1%, x2%, y2%)
         Dim graphic As Graphics = EtchASketchPictureBox.CreateGraphics
-        Dim myPen = New Pen(Me.currentColor)
+        Dim myPen = New Pen(Me.currentColor, 5)
 
         graphic.DrawLine(myPen, x1, y1, x2, y2)
 
@@ -36,20 +53,7 @@ Public Class EtchASketchForm
     End Sub
 
     Private Sub ClearButton_Click(sender As Object, e As EventArgs) Handles ClearButton.Click, ClearToolStripMenuItem.Click
-        Dim clearResponse As Integer
-        Dim offset As Integer = 25
-
-        clearResponse = MsgBox("Are you sure you wish to clear the Etch-A-Sketch?", vbYesNo, "Clear the Etch-A-Sketch.")
-
-        If clearResponse = vbYes Then
-            For i = 1 To 10
-                offset = offset * -1
-                Me.Top += offset
-                Me.Left += offset
-                System.Threading.Thread.Sleep(100)
-            Next
-            EtchASketchPictureBox.Refresh()
-        End If
+        ClearForm()
     End Sub
 
     Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
