@@ -10,7 +10,27 @@ Option Strict On
 Public Class EtchASketchForm
     Dim currentColor As Color
 
-    Sub drawSinWave()
+    Sub DrawCosWave()
+        Dim oldColor As Color = Me.currentColor
+        Me.currentColor = Color.Green
+
+        Dim vmax# = ((EtchASketchPictureBox.Height - 5) \ 2)
+        Dim yOffset# = vmax
+        Dim lastX% = -1, lastY% = CInt(yOffset), currentY%, currentX%
+        Dim angle#
+
+        For x = 0 To CInt(EtchASketchPictureBox.Width) Step EtchASketchPictureBox.Width / 360
+            angle = (Math.PI / 180) * x
+            currentY = CInt(-1 * vmax * Math.Cos(angle) + yOffset)
+            currentX = CInt(x * EtchASketchPictureBox.Width / 360)
+            DrawLineSegment(lastX, lastY, currentX, currentY)
+            lastX = currentX
+            lastY = currentY
+        Next
+        Me.currentColor = oldColor
+    End Sub
+
+    Sub DrawSinWave()
         Dim oldColor As Color = Me.currentColor
         Me.currentColor = Color.Red
 
@@ -89,7 +109,6 @@ Public Class EtchASketchForm
             Case "Middle"
                 UpdateColor()
         End Select
-        Me.Text = $"({e.X},{e.Y}) button: {e.Button.ToString} Color: {Me.currentColor.ToString}"
         lastX = e.X
         lastY = e.Y
     End Sub
@@ -104,6 +123,7 @@ Public Class EtchASketchForm
 
     Private Sub DrawWaveformsButton_Click(sender As Object, e As EventArgs) Handles DrawWaveformsButton.Click, DrawWaveformsToolStripMenuItem.Click
         ClearForm()
-        drawSinWave()
+        DrawSinWave()
+        DrawCosWave()
     End Sub
 End Class
